@@ -16,17 +16,35 @@ class PolymerPrint extends PolymerElement {
           display: block;
         }
       </style>
-      <h2>Hello [[prop1]]!</h2>
+      <template is="dom-if" if="{{debug}}">
+        <h2>[[error]]</h2>
+      </template>
     `;
   }
   static get properties() {
     return {
-      prop1: {
+      error: {
         type: String,
-        value: 'polymer-print',
+        notify: true,
+        reflectToAttribute: true,
+      },
+      debug: {
+        type: Boolean,
+        value: false,
+      },
+      html: {
+        type: String,
+        observer: '_print'
       },
     };
   }
-}
 
-window.customElements.define('polymer-print', PolymerPrint);
+  _print(){
+    var printWindow=window.open('','','width=200,height=100');
+    printWindow.document.write(this.html);
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  }
+} window.customElements.define('polymer-print', PolymerPrint);
