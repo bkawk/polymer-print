@@ -38,13 +38,20 @@ class PolymerPrint extends PolymerElement {
       },
     };
   }
-
   _print(){
-    var printWindow=window.open('','','width=200,height=100');
-    printWindow.document.write(this.html);
-    printWindow.document.close();
-    printWindow.focus();
-    printWindow.print();
-    printWindow.close();
+    this.print(this.html)
+    .catch((err) => {
+      this.error = err;
+    })
+  }
+  print(html){
+    return new Promise((resolve, reject) => {
+      var printWindow=window.open('','','width=200,height=100');
+      printWindow.document.write(html);
+      printWindow.document.close();
+      printWindow.focus();
+      printWindow.print();
+      printWindow.close();
+    })
   }
 } window.customElements.define('polymer-print', PolymerPrint);
