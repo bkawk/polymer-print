@@ -44,14 +44,21 @@ class PolymerPrint extends PolymerElement {
       this.error = err;
     })
   }
-  print(html){
+  print(htmlToPrint){
     return new Promise((resolve, reject) => {
+      console.log(htmlToPrint)
       var printWindow=window.open('','','width=200,height=100');
-      printWindow.document.write(html);
+      printWindow.document.write(htmlToPrint);
       printWindow.document.close();
       printWindow.focus();
-      printWindow.print();
-      printWindow.close();
+      setTimeout(function () { 
+        printWindow.print(); 
+      }, 500);
+      printWindow.onfocus = function () { 
+        setTimeout(function () { 
+          printWindow.close(); 
+        }, 500); 
+      }
     })
   }
 } window.customElements.define('polymer-print', PolymerPrint);
